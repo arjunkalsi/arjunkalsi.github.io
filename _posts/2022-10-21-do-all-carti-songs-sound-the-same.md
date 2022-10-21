@@ -1,6 +1,12 @@
+---
+layout: post
+title: Do All Playboi Carti Songs Sound The Same - A Study
+subtitle: Do they?
+tags: [math, tech]
+---
+![Alt Text](https://media0.giphy.com/media/McmAF0TXnXNZPBqBud/giphy.gif)
 
 ### As I learn more and more in my postgraduate degree in mathematics, I can't help but return back to the age-old question - the question everyone wants an answer to - "do all Playboi Carti songs sound the same?". Luckily, now we can actually mathematically find out. Let's do some data visualisation and see whats going on with Jordan Carter's music:
-
 
 ```python
 #import python modules for data manipulation and visualisation
@@ -18,7 +24,7 @@ sns.set()
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
-cid ="36d9dfbc63c5405795ff6c80bd02a20f" 
+cid ="36d9dfbc63c5405795ff6c80bd02a20f"
 secret = "0b047cfb14fb46ad8d7130294c975b1d"
 
 client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
@@ -170,7 +176,7 @@ for i in range(0,len(df_carti_tracks['track_id']),batchsize):
             None_counter = None_counter + 1
         else:
             rows.append(t)
-            
+
 print('Number of tracks where no audio features were available:',None_counter)
 ```
 
@@ -474,7 +480,7 @@ sns.pairplot(df_characteristics)
 
 
 
-![png](output_15_1.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/carti/output_15_1.png)
 
 
 
@@ -641,10 +647,12 @@ plt.show()
 ```
 
 
-![png](output_18_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/carti/output_18_0.png)
 
 
 So we can see that as speechiness increases (more words... lol), valence also tends to increase. This means the more words Carti says, the more positive the song is. I can't stop laughing at this result to be honest with you.
+
+![Alt Text](https://media0.giphy.com/media/l1J3KFPMztOKgcp32/giphy.gif?cid=ecf05e47uz39p8nopov6f4smzh98vtq7om1fd7sixkmbbcun&rid=giphy.gif&ct=g)
 
 Now we're going to use a tSNE plot (a method used for dimensionality reduction - since we have 8 dimensions, one for each characteristic, we need to use this method to essentially map the data onto a 2D plane). More information on tSNE can be found online, and there are some great youtube videos on it. Let's run the code to do this:
 
@@ -729,7 +737,7 @@ plt.show()
 ```
 
 
-![png](output_21_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/carti/output_21_0.png)
 
 
 The points span a large amount of the space, and we can see some clusters forming. I tested various perplexity values and 6 pulled clusters together without contraining them too much. We can clearly see variability as well as similarities between some songs! Let's take a look at the clusters:
@@ -762,7 +770,7 @@ plt.show()
 ```
 
 
-![png](output_23_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/carti/output_23_0.png)
 
 
 Long Time, Location, Home, and Flex are being pulled together - that kind of makes sense to me because these are all pretty spacey, airy beats with a lot of distance between the listener and the audio.
@@ -793,7 +801,7 @@ plt.show()
 ```
 
 
-![png](output_25_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/carti/output_25_0.png)
 
 
 Half & Half, Other Sh-t, Go2DaMoon are clustering. These all have pretty bouncy 808s with space between the sample one-shots (I understand it may seem like I'm just making stuff up at this point but I'm not).
@@ -826,13 +834,15 @@ plt.show()
 ```
 
 
-![png](output_27_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/carti/output_27_0.png)
 
 
 I'm really not sure how to explain this one, especially Lean 4 Real - maybe one of you can help me out. Message me what you think.
 
 ### So we have an answer - NOT ALL CARTI SONGS SOUND THE SAME. But you already knew that, didn't you?
 ### See you next time (Lil Uzi?)
+
+![Alt Text](https://media0.giphy.com/media/l4FssXeliObIRSCmQ/giphy.gif?cid=ecf05e47uq3eqixaz6t4l4gdv029czyyeszaf4k0w5s73a5d&rid=giphy.gif&ct=g)
 
 
 ```python
