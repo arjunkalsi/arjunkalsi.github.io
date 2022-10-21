@@ -22,10 +22,7 @@ username: Lorem Ipsum
 user_description: Lorem Developer
 user_title: Lorem Ipsum
 email: lorem@ipsum.com
-twitter_username: loremipsum
 github_username:  loremipsum
-gplus_username:  loremipsum
-disqus_username: loremipsum
 
 ```
 
@@ -99,7 +96,7 @@ First, install [jekyll](https://jekyllrb.com/) and [node.js](https://nodejs.org/
 
 **Space Jekyll** uses the [Stylus](http://stylus-lang.com/) to process his css, then modifies the style of the theme in [this folder](https://github.com/victorvoid/space-jekyll-template/tree/master/src/styl).
 
-You can go in the [variable.styl](https://github.com/victorvoid/space-jekyll-template/blob/master/src/styl/_variables.styl) and modify the colors. 
+You can go in the [variable.styl](https://github.com/victorvoid/space-jekyll-template/blob/master/src/styl/_variables.styl) and modify the colors.
 
 
 ## License
