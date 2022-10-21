@@ -5,74 +5,20 @@ subtitle: We test 3 different models for missing data filling, and see which per
 tags: [math, tech]
 ---
 
-```python
-%matplotlib inline
-import matplotlib.pyplot as plt
-import warnings
-warnings.filterwarnings('ignore')
-
-import numpy as np
-import matplotlib.pyplot as plt
-from PIL import Image
-from scipy.ndimage.interpolation import zoom
-from sklearn.metrics import mean_squared_error
-
-
-fname = 'einstein.jpg'
-i_width = 640
-i_height = 480
-```
-
-
-```python
-
-sampling_threshold = 0.8
-
-image = zoom(np.asarray(Image.open(fname).convert("L")), 0.2).astype(np.float)
-
-
-image_ss = image.copy()
-mask = np.random.uniform(size=image_ss.shape) < 1- sampling_threshold
-image_ss[mask] = np.nan
-plt.imshow(image_ss, cmap='gray', vmin=0, vmax=255)
-plt.show()
-image_ss.shape
-```
+### Today we're looking at 3 different methods for filling missing image data - a Random Forest Regressor, a Gradient Boosting Regressor, and a 2-D Gaussian kernel detailed below. Let's see which one performs best at filling missing data! This is the picture we are filling in:
 
 
 ![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_1_0.png)
 
-
-
-
-
-    (254, 240)
-
-
-
-
-```python
-np.isnan(image_ss[0][1])
-```
-
-
-
-
-    False
-
-
-
-### a.
-
-Construct ytrain, Xtrain consisting of all available non-N/A pixel values and their positions. Let Xtest be the positions of the missing pixels whose values you are trying to reconstruct.
+There are many missing values. We first Construct $y_{train}$, $X_{train}$ consisting of all available non-N/A pixel values and their positions. Let $X_{test}$ be the positions of the missing pixels whose values you are trying to reconstruct.
 
 Next, using each of the following methods:
 
-• RandomForrestRegresor
+• RandomForestRegressor
 
 • GradientBoostingRegressor
 
-• A 2 − D Gaussian kernel feature map regression, where each of your feature maps is φσ(x, x0) = exp(−|x−x0|^2/2σ^2) and you have rescaled your image pixel locations so that x, x0 ∈ [0, 1]2
+• A 2−D Gaussian kernel feature map regression, where each of your feature maps is φσ(x, x0) = exp(−|x−x0|^2/2σ^2) and you have rescaled your image pixel locations so that x, x0 ∈ [0, 1]^2
 
 
 ```python
@@ -91,56 +37,22 @@ for i in range(image_ss.shape[0]):
         else:
             X_test.append([i,j])
             y_test_actual.append(image[i][j])
-```
 
 
-```python
 def extractDigits(lst):
     return [[el] for el in lst]
-```
 
 
-```python
 y_test_actual = np.array(extractDigits(y_test_actual))
-y_test_actual
 ```
 
-
-
-
-    array([[84.],
-           [63.],
-           [65.],
-           ...,
-           [59.],
-           [33.],
-           [57.]])
-
-
-
-
-```python
-
-```
-
-
-
-
-    12302
-
-
-
-### b. and c.
+Now that we have our data sets sorted out, we can test each technique:
 
 ### 1. RandomForestRegressor
 
 
 ```python
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-```
-
-
-```python
 from sklearn.model_selection import GridSearchCV
 
 model = RandomForestRegressor()
@@ -162,12 +74,10 @@ print(-gs.best_score_)
     4418.159874196007
 
 
-
 ```python
 rfModel = RandomForestRegressor(max_depth=10,min_samples_split=20)
 rfModel.fit(X_train,y_train)
 ```
-
 
 
 
@@ -180,7 +90,6 @@ rfModel.fit(X_train,y_train)
 
 
 
-
 ```python
 for i in range(image_ss.shape[0]):
     for j in range(image_ss.shape[1]):
@@ -188,21 +97,15 @@ for i in range(image_ss.shape[0]):
             y = rfModel.predict([[i,j]])
             X_test.append([i,j])
             y_test.append(y)
-```
 
-
-```python
 MSErf = mean_squared_error(y_test,y_test_actual)
 MSErf
 ```
 
 
-
-
     674.9260644662936
 
-
-
+This is the MSE of our RFR method.
 
 ```python
 image_ss_complete = np.zeros([254,240])
@@ -216,10 +119,7 @@ for i in range(254):
         elif [i,j] in X_test:
             pos2 = X_test.index([i,j])
             image_ss_complete[i][j] = y_test[pos2]
-```
 
-
-```python
 plt.imshow(image_ss_complete, cmap='gray', vmin=0, vmax=255)
 plt.show()
 ```
@@ -254,12 +154,10 @@ print(-gs2.best_score_)
     4154.170911663076
 
 
-
 ```python
 gbModel = GradientBoostingRegressor(learning_rate=0.1,max_depth=5,n_estimators=100)
 gbModel.fit(X_train,y_train)
 ```
-
 
 
 
@@ -274,7 +172,6 @@ gbModel.fit(X_train,y_train)
 
 
 
-
 ```python
 X_test2 = []
 
@@ -284,21 +181,15 @@ for i in range(image_ss.shape[0]):
             y = gbModel.predict([[i,j]])
             X_test2.append([i,j])
             y_test2.append(y)
-```
 
-
-```python
 MSEgb = mean_squared_error(y_test2,y_test_actual)
 MSEgb
 ```
 
 
-
-
     807.2361077570746
 
-
-
+This is the MSE of our GBR method.
 
 ```python
 image_ss_complete2 = np.zeros([254,240])
@@ -312,10 +203,7 @@ for i in range(254):
         elif [i,j] in X_test2:
             pos2 = X_test2.index([i,j])
             image_ss_complete2[i][j] = y_test2[pos2]
-```
 
-
-```python
 plt.imshow(image_ss_complete2, cmap='gray', vmin=0, vmax=255)
 plt.show()
 ```
@@ -331,41 +219,15 @@ plt.show()
 from sklearn.model_selection import cross_val_score
 from numpy.linalg import norm
 from sklearn.linear_model import LinearRegression
-```
 
-
-```python
 X_train_np = np.array(X_train)
 X_test_np  = np.array(X_test)
 y_train_np = np.array(extractDigits(y_train))
-```
 
-
-```python
-X_train_np
-```
-
-
-
-
-    array([[  0,   0],
-           [  0,   1],
-           [  0,   2],
-           ...,
-           [253, 236],
-           [253, 237],
-           [253, 239]])
-
-
-
-
-```python
 def gauss(x,x_0,sig):
     return np.exp((-norm(x-x_0)**2) / sig**2)
-```
 
 
-```python
 x_0  = np.array([125,125]) # roughly in the middle
 sigs = [0.25,0.5,0.75,1,2,3,4,5,6,7,8,9,10,15,30,50]
 lowestMSE = np.inf
@@ -416,36 +278,14 @@ for sig in sigs:
 
 
 
-```python
-lowestMSE
-```
-
-
-
-
-    7643.011517213762
-
+The lowest MSE for this method is 7643.01 (not very low) when sigma = 50.
+Let's use this on the test set:
 
 
 
 ```python
 lin = LinearRegression()
-```
 
-
-```python
-X_test_np.shape
-```
-
-
-
-
-    (12302, 2)
-
-
-
-
-```python
 sig = 50
 
 gauss_X_train = np.array([gauss(x,x_0,sig) for x in X_train_np])
@@ -455,22 +295,7 @@ lin.fit(gauss_X_train,y_train_np)
 
 gauss_X_test = np.array([gauss(x,x_0,sig) for x in X_test_np])
 gauss_X_test = gauss_X_test.reshape((X_test_np.shape[0],1))
-```
 
-
-```python
-len(y_test_actual)
-```
-
-
-
-
-    12302
-
-
-
-
-```python
 gauss_y_test = lin.predict(gauss_X_test)
 MSE = mean_squared_error(gauss_y_test,y_test_actual)
 MSE
@@ -478,11 +303,9 @@ MSE
 
 
 
-
     5798.050017820173
 
-
-
+The MSE for this method is still pretty high. Let's see what it looks like:
 
 ```python
 image_ss_gauss = image_ss.copy()
@@ -493,10 +316,7 @@ for i in range(0,image_ss_gauss.shape[0]):
         if np.isnan(image_ss_gauss[i][j]):
             image_ss_gauss[i][j] = gauss_y_test[index]
             index += 1
-```
 
-
-```python
 plt.imshow(image_ss_gauss, cmap='gray', vmin=0, vmax=255)
 plt.show()
 ```
@@ -507,182 +327,9 @@ plt.show()
 
 ### We can see that the Random Forest Regressor looks like it's performing the best here as it has the lowest MSE. However, Gradient Boosting looks better and  I think this may be due to the inspection of more optimal parameters in the cross-validation stage, allowing the predict function to predict better parameters.
 
-### d. Run these 3 again if it throws an error:
+Seperately, I investigated the effect of adding an L1 − L2 elastic net regularization to the 2−D Gaussian kernel feature map regression method and found the optimal parameters of my model using cross-validation, but I omitted this here.
 
-
-```python
-y_train = []
-y_test  = []
-X_train = []
-X_test  = []
-y_test_actual = []
-
-
-for i in range(image_ss.shape[0]):
-    for j in range(image_ss.shape[1]):
-        if not np.isnan(image_ss[i][j]):
-            y_train.append(image_ss[i][j])
-            X_train.append([i,j])
-        else:
-            X_test.append([i,j])
-            y_test_actual.append(image[i][j])
-```
-
-
-```python
-def extractDigits(lst):
-    return [[el] for el in lst]
-```
-
-
-```python
-y_test_actual = np.array(extractDigits(y_test_actual))
-y_test_actual
-```
-
-
-
-
-    array([[84.],
-           [63.],
-           [65.],
-           ...,
-           [59.],
-           [33.],
-           [57.]])
-
-
-
-
-```python
-from sklearn.linear_model import ElasticNet
-
-en = ElasticNet()
-```
-
-
-```python
-X_train_npd = X_train_np
-y_train_npd = y_train_np
-X_test_npd  = X_test_np
-```
-
-
-```python
-lowestMSE2 = np.inf
-
-for sig in sigs:
-
-    gauss_X_train2 = np.array([gauss(x,x_0,sig) for x in X_train_npd])
-    gauss_X_train2 = gauss_X_train2.reshape((48658,1))
-    scores = cross_val_score(en,gauss_X_train2,y_train_npd,cv=5,scoring='neg_mean_squared_error')
-
-    print(f'sigma = {sig}')
-    print(f'MSE = {-scores.mean()}')
-    if (-scores.mean() < lowestMSE2):
-        lowestMSE2 = -scores.mean()
-
-```
-
-    sigma = 0.25
-    MSE = 9504.994772092705
-    sigma = 0.5
-    MSE = 9504.994772092705
-    sigma = 0.75
-    MSE = 9504.994772092705
-    sigma = 1
-    MSE = 9504.994772092705
-    sigma = 2
-    MSE = 9504.994772092705
-    sigma = 3
-    MSE = 9504.994772092705
-    sigma = 4
-    MSE = 9504.994772092705
-    sigma = 5
-    MSE = 9504.994772092705
-    sigma = 6
-    MSE = 9504.994772092705
-    sigma = 7
-    MSE = 9504.994772092705
-    sigma = 8
-    MSE = 9504.994772092705
-    sigma = 9
-    MSE = 9504.994772092705
-    sigma = 10
-    MSE = 9505.01856318883
-    sigma = 15
-    MSE = 9504.647596458806
-    sigma = 30
-    MSE = 9448.420285694248
-    sigma = 50
-    MSE = 8986.996896636269
-
-
-
-```python
-lowestMSE2
-```
-
-
-
-
-    8986.996896636269
-
-
-
-### Thus the optimal sigma is 50 out of our choices
-
-
-```python
-sig = 50
-
-gauss_X_train2 = np.array([gauss(x,x_0,sig) for x in X_train_npd])
-gauss_X_train2 = gauss_X_train2.reshape((X_train_npd.shape[0],1))
-
-en.fit(gauss_X_train2,y_train_npd)
-
-gauss_X_test2 = np.array([gauss(x,x_0,sig) for x in X_test_npd])
-gauss_X_test2 = gauss_X_test2.reshape((X_test_np.shape[0],1))
-```
-
-
-```python
-gauss_y_test2 = lin.predict(gauss_X_test2)
-MSE = mean_squared_error(gauss_y_test2,y_test_actual)
-MSE
-```
-
-
-
-
-    5798.050017820173
-
-
-
-
-```python
-image_ss_gauss2 = image_ss.copy()
-
-index = 0
-for i in range(0,image_ss_gauss2.shape[0]):
-    for j in range(0,image_ss_gauss2.shape[1]):
-        if np.isnan(image_ss_gauss2[i][j]):
-            image_ss_gauss2[i][j] = gauss_y_test2[index]
-            index += 1
-```
-
-
-```python
-plt.imshow(image_ss_gauss2, cmap='gray', vmin=0, vmax=255)
-plt.show()
-```
-
-
-![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_51_0.png)
-
-
-### e)
-
+Another way to improve our model is to add new features as follows. Instead of $y = f(i, j)$, we could also consider the model $y = f(i, j, y_{up}, y_{dn}, y_{l}, y_{r})$ where the $y$ values are the pixel values, if available, directly above, below, to the left and to the right of the target pixel at i, j. Use −999 to denote a missing value pixel:
 
 ```python
 X_train_yu = []
@@ -699,10 +346,7 @@ X_traini = []
 X_trainj = []
 X_testi  = []
 X_testj  = []
-```
 
-
-```python
 for i in range(0,image_ss.shape[0]):
     for j in range(0,image_ss.shape[1]):
 
@@ -830,38 +474,9 @@ for i in range(0,image_ss.shape[0]):
             except IndexError as e:
                 X_train_yr.append(-999)
 
-
 ```
 
-
-```python
-
-```
-
-
-
-
-    97316
-
-
-
-
-```python
-import pandas as pd
-
-df1 = pd.DataFrame(zip(X_traini,X_trainj,X_train_yu,X_train_yd,X_train_yl,X_train_yr),columns=['i','j','up','down','left','right'])
-
-df2 = pd.DataFrame(zip(X_testi,X_testj,X_test_yu,X_test_yd,X_test_yl,X_test_yr),columns=['i','j','up','down','left','right'])
-
-```
-
-
-```python
-df1
-```
-
-
-
+Here's what the dataframe looks like:
 
 <div>
 <style scoped>
@@ -994,27 +609,9 @@ df1
 <p>48658 rows × 6 columns</p>
 </div>
 
-
+Now let's try each of our methods again.
 
 ### RandomForestRegressor with ys:
-
-
-```python
-y_train_np
-```
-
-
-
-
-    array([[84.],
-           [89.],
-           [98.],
-           ...,
-           [25.],
-           [26.],
-           [51.]])
-
-
 
 
 ```python
@@ -1031,40 +628,12 @@ gs = GridSearchCV(model,
 
 gs.fit(df1,y_train_np)
 
-print(gs.best_params_)
-print(-gs.best_score_)
-```
-
-    {'max_depth': 10, 'min_samples_split': 20}
-    200.7589363491317
-
-
-
-```python
 rfModel = RandomForestRegressor(max_depth=10,min_samples_split=20)
 rfModel.fit(df1,y_train_np)
-```
 
-
-
-
-    RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=10,
-               max_features='auto', max_leaf_nodes=None,
-               min_impurity_decrease=0.0, min_impurity_split=None,
-               min_samples_leaf=1, min_samples_split=20,
-               min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=None,
-               oob_score=False, random_state=None, verbose=0, warm_start=False)
-
-
-
-
-```python
 X_test2 = []
 y_test2 = []
-```
 
-
-```python
 y_test2 = rfModel.predict(df2)
 MSE = mean_squared_error(y_test_actual,y_test2)
 MSE
@@ -1072,11 +641,9 @@ MSE
 
 
 
-
     187.91561207966419
 
-
-
+(much lower MSE)
 
 ```python
 image_ss_complete3 = image_ss.copy()
@@ -1087,10 +654,7 @@ for i in range(image_ss_complete3.shape[0]):
         if np.isnan(image_ss_complete3[i][j]):
             image_ss_complete3[i][j] = y_test2[index]
             index += 1
-```
 
-
-```python
 plt.imshow(image_ss_complete3, cmap='gray', vmin=0, vmax=255)
 plt.show()
 ```
@@ -1117,42 +681,12 @@ gs = GridSearchCV(model2,
 
 gs.fit(df1,y_train_np)
 
-print(gs.best_params_)
-print(-gs.best_score_)
-```
-
-    {'learning_rate': 0.1, 'max_depth': 5, 'n_estimators': 100}
-    181.12659547528474
-
-
-
-```python
 gbModel = GradientBoostingRegressor(max_depth=5,learning_rate=0.1,n_estimators=100)
 gbModel.fit(df1,y_train_np)
-```
 
-
-
-
-    GradientBoostingRegressor(alpha=0.9, criterion='friedman_mse', init=None,
-                 learning_rate=0.1, loss='ls', max_depth=5, max_features=None,
-                 max_leaf_nodes=None, min_impurity_decrease=0.0,
-                 min_impurity_split=None, min_samples_leaf=1,
-                 min_samples_split=2, min_weight_fraction_leaf=0.0,
-                 n_estimators=100, n_iter_no_change=None, presort='auto',
-                 random_state=None, subsample=1.0, tol=0.0001,
-                 validation_fraction=0.1, verbose=0, warm_start=False)
-
-
-
-
-```python
 X_test3 = []
 y_test3 = []
-```
 
-
-```python
 y_test3 = gbModel.predict(df2)
 MSE = mean_squared_error(y_test_actual,y_test3)
 MSE
@@ -1160,9 +694,7 @@ MSE
 
 
 
-
     161.93799834274037
-
 
 
 
@@ -1175,10 +707,7 @@ for i in range(image_ss_complete4.shape[0]):
         if np.isnan(image_ss_complete4[i][j]):
             image_ss_complete4[i][j] = y_test3[index]
             index += 1
-```
 
-
-```python
 plt.imshow(image_ss_complete4, cmap='gray', vmin=0, vmax=255)
 plt.show()
 ```
@@ -1187,144 +716,4 @@ plt.show()
 ![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_72_0.png)
 
 
-### 2-D Gaussian Kernel FM Regressor with ys
-
-
-```python
-X_train_npd2 = df1.to_numpy()
-X_test_npd2  = df2.to_numpy()
-```
-
-
-```python
-48658/2
-```
-
-
-
-
-    24329.0
-
-
-
-
-```python
-lowestMSE3 = np.inf
-
-x_0 = X_train_npd2[24329]
-
-for sig in sigs:
-
-    gauss_X_train3 = np.array([gauss(x,x_0,sig) for x in X_train_npd2])
-    gauss_X_train3 = gauss_X_train3.reshape((X_train_npd2.shape[0],1))
-    scores = cross_val_score(en,gauss_X_train3,y_train_npd,cv=5,scoring='neg_mean_squared_error')
-
-    print(f'sigma = {sig}')
-    print(f'MSE = {-scores.mean()}')
-    if (-scores.mean() < lowestMSE3):
-        lowestMSE3 = -scores.mean()
-```
-
-    sigma = 0.25
-    MSE = 9504.994772092705
-    sigma = 0.5
-    MSE = 9504.994772092705
-    sigma = 0.75
-    MSE = 9504.994772092705
-    sigma = 1
-    MSE = 9504.994772092705
-    sigma = 2
-    MSE = 9504.994772092705
-    sigma = 3
-    MSE = 9504.994772092705
-    sigma = 4
-    MSE = 9504.994772092705
-    sigma = 5
-    MSE = 9504.994772092705
-    sigma = 6
-    MSE = 9504.994772092705
-    sigma = 7
-    MSE = 9504.994772092705
-    sigma = 8
-    MSE = 9504.994772092705
-    sigma = 9
-    MSE = 9504.994772092705
-    sigma = 10
-    MSE = 9504.994772092705
-    sigma = 15
-    MSE = 9504.994772092705
-    sigma = 30
-    MSE = 9505.071274484731
-    sigma = 50
-    MSE = 9504.542102155796
-
-
-
-```python
-lowestMSE3
-```
-
-
-
-
-    9504.542102155796
-
-
-
-Thus choose sigma = 50
-
-
-```python
-sig = 50
-
-gauss_X_train3 = np.array([gauss(x,x_0,sig) for x in X_train_npd2])
-gauss_X_train3 = gauss_X_train3.reshape((X_train_npd2.shape[0],1))
-
-en.fit(gauss_X_train3,y_train_npd)
-
-gauss_X_test3 = np.array([gauss(x,x_0,sig) for x in X_test_npd2])
-gauss_X_test3 = gauss_X_test3.reshape((X_test_npd2.shape[0],1))
-```
-
-
-```python
-gauss_y_test3 = lin.predict(gauss_X_test3)
-MSE = mean_squared_error(gauss_y_test3,y_test_actual)
-MSE
-```
-
-
-
-
-    10771.21111500808
-
-
-
-
-```python
-image_ss_gauss2 = image_ss.copy()
-
-index = 0
-for i in range(image_ss_gauss2.shape[0]):
-    for j in range(image_ss_gauss2.shape[1]):
-        if np.isnan(image_ss_gauss2[i][j]):
-            image_ss_gauss2[i][j] = gauss_y_test3[index]
-            index += 1
-```
-
-
-```python
-plt.imshow(image_ss_gauss2, cmap='gray', vmin=0, vmax=255)
-plt.show()
-```
-
-
-![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_82_0.png)
-
-
-### Thus the GradientBoostingRegressor produces the lowest MSE with a value of 161.94
-
-
-```python
-
-```
+### We can see the GBR performs really well with this method. We could go even further and add diagonal adjacent values to improve our modelling method, or even pixels that are 2 away from the pixel in focus etc. Either way a GBR may be preferable to a RFR method based on our results here, however you probably know that a deep learning method is likely to perform even better than both, especially in light of the current wave of visual work innovation that is occurring at the moment. Either way thanks for reading and happy image filling! 
