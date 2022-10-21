@@ -1,4 +1,9 @@
-
+---
+layout: post
+title: Filling In Missing Image Data With Regression Models
+subtitle: We test 3 different models for missing data filling, and see which performs best.
+tags: [math, tech]
+---
 
 ```python
 %matplotlib inline
@@ -35,7 +40,7 @@ image_ss.shape
 ```
 
 
-![png](output_1_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_1_0.png)
 
 
 
@@ -220,7 +225,7 @@ plt.show()
 ```
 
 
-![png](output_16_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_16_0.png)
 
 
 ### 2. GradientBoostingRegressor
@@ -316,7 +321,7 @@ plt.show()
 ```
 
 
-![png](output_23_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_23_0.png)
 
 
 ### 3. 2-D Gaussian kernel FM Regressor
@@ -356,7 +361,7 @@ X_train_np
 
 ```python
 def gauss(x,x_0,sig):
-    return np.exp((-norm(x-x_0)**2) / sig**2) 
+    return np.exp((-norm(x-x_0)**2) / sig**2)
 ```
 
 
@@ -373,7 +378,7 @@ for sig in sigs:
     print(f'MSE = {-scores.mean()}')
     if (-scores.mean() < lowestMSE):
         lowestMSE = -scores.mean()
-        
+
 ```
 
     sigma = 0.25
@@ -497,7 +502,7 @@ plt.show()
 ```
 
 
-![png](output_37_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_37_0.png)
 
 
 ### We can see that the Random Forest Regressor looks like it's performing the best here as it has the lowest MSE. However, Gradient Boosting looks better and  I think this may be due to the inspection of more optimal parameters in the cross-validation stage, allowing the predict function to predict better parameters.
@@ -567,16 +572,16 @@ X_test_npd  = X_test_np
 lowestMSE2 = np.inf
 
 for sig in sigs:
-    
+
     gauss_X_train2 = np.array([gauss(x,x_0,sig) for x in X_train_npd])
     gauss_X_train2 = gauss_X_train2.reshape((48658,1))
     scores = cross_val_score(en,gauss_X_train2,y_train_npd,cv=5,scoring='neg_mean_squared_error')
-    
+
     print(f'sigma = {sig}')
     print(f'MSE = {-scores.mean()}')
     if (-scores.mean() < lowestMSE2):
         lowestMSE2 = -scores.mean()
-        
+
 ```
 
     sigma = 0.25
@@ -673,7 +678,7 @@ plt.show()
 ```
 
 
-![png](output_51_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_51_0.png)
 
 
 ### e)
@@ -700,132 +705,132 @@ X_testj  = []
 ```python
 for i in range(0,image_ss.shape[0]):
     for j in range(0,image_ss.shape[1]):
-        
+
         if np.isnan(image_ss[i][j]):
-            
+
             X_testi.append(i)
             X_testj.append(j)
-            
+
             # must have a try here otherwise sometimes it returns errors at the boundaries
             # now if it's out of bounds it will just add -999 anyway
-            # up 
+            # up
             try:
                 if i==0:
                     X_test_yu.append(-999)
-                    
+
                 elif np.isnan(image_ss[i-1][j]):
                         X_test_yu.append(-999)
-                        
+
                 else:
                     X_test_yu.append(image_ss[i-1][j])
-                        
+
             except IndexError as e:
                 X_test_yu.append(-999)
-                
+
             # down
             try:
                 if i==image_ss.shape[0]:
                     X_test_yd.append(-999)
-                    
+
                 elif np.isnan(image_ss[i+1][j]):
                         X_test_yd.append(-999)
-                        
+
                 else:
                     X_test_yd.append(image_ss[i+1][j])
-                        
+
             except IndexError as e:
                 X_test_yd.append(-999)
-            
+
             # left
             try:
                 if j==0:
                     X_test_yl.append(-999)
-                    
+
                 elif np.isnan(image_ss[i][j-1]):
                         X_test_yl.append(-999)
-                        
+
                 else:
                     X_test_yl.append(image_ss[i][j-1])
-                        
+
             except IndexError as e:
                 X_test_yl.append(-999)
-                
+
             # right
             try:
                 if j==image_ss.shape[1]:
                     X_test_yr.append(-999)
-                    
+
                 elif np.isnan(image_ss[i][j+1]):
                         X_test_yr.append(-999)
-                        
+
                 else:
                     X_test_yr.append(image_ss[i][j+1])
-                        
+
             except IndexError as e:
                 X_test_yr.append(-999)
-                
+
         else:
-            
+
             X_traini.append(i)
             X_trainj.append(j)
-            
-            # up 
+
+            # up
             try:
                 if i==0:
                     X_train_yu.append(-999)
-                    
+
                 elif np.isnan(image_ss[i-1][j]):
                         X_train_yu.append(-999)
-                        
+
                 else:
                     X_train_yu.append(image_ss[i-1][j])
-                        
+
             except IndexError as e:
                 X_train_yu.append(-999)
-                
+
             # down
             try:
                 if i==image_ss.shape[0]:
                     X_train_yd.append(-999)
-                    
+
                 elif np.isnan(image_ss[i+1][j]):
                         X_train_yd.append(-999)
-                        
+
                 else:
                     X_train_yd.append(image_ss[i+1][j])
-                        
+
             except IndexError as e:
                 X_train_yd.append(-999)
-            
+
             # left
             try:
                 if j==0:
                     X_train_yl.append(-999)
-                    
+
                 elif np.isnan(image_ss[i][j-1]):
                         X_train_yl.append(-999)
-                        
+
                 else:
                     X_train_yl.append(image_ss[i][j-1])
-                        
+
             except IndexError as e:
                 X_train_yl.append(-999)
-                
+
             # right
             try:
                 if j==image_ss.shape[1]:
                     X_train_yr.append(-999)
-                    
+
                 elif np.isnan(image_ss[i][j+1]):
                         X_train_yr.append(-999)
-                        
+
                 else:
                     X_train_yr.append(image_ss[i][j+1])
-                        
+
             except IndexError as e:
                 X_train_yr.append(-999)
-                
-            
+
+
 ```
 
 
@@ -1091,7 +1096,7 @@ plt.show()
 ```
 
 
-![png](output_65_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_65_0.png)
 
 
 ### GradientBoostingRegressor with ys
@@ -1179,7 +1184,7 @@ plt.show()
 ```
 
 
-![png](output_72_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_72_0.png)
 
 
 ### 2-D Gaussian Kernel FM Regressor with ys
@@ -1209,11 +1214,11 @@ lowestMSE3 = np.inf
 x_0 = X_train_npd2[24329]
 
 for sig in sigs:
-    
+
     gauss_X_train3 = np.array([gauss(x,x_0,sig) for x in X_train_npd2])
     gauss_X_train3 = gauss_X_train3.reshape((X_train_npd2.shape[0],1))
     scores = cross_val_score(en,gauss_X_train3,y_train_npd,cv=5,scoring='neg_mean_squared_error')
-    
+
     print(f'sigma = {sig}')
     print(f'MSE = {-scores.mean()}')
     if (-scores.mean() < lowestMSE3):
@@ -1314,7 +1319,7 @@ plt.show()
 ```
 
 
-![png](output_82_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_82_0.png)
 
 
 ### Thus the GradientBoostingRegressor produces the lowest MSE with a value of 161.94
