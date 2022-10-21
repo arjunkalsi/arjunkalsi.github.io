@@ -8,12 +8,9 @@ url: "https://arjunkalsi.github.io" # for test: remove string 'http://victorvoid
 username: arjun kalsi
 user_title: Arjun Kalsi
 email: arjunkalsi88@gmail.com
-twitter_username: kalsi_arjun
 github_username:  arjunkalsi
-discord_invite: cj5rg # Example: Discord server invite gg extension like in 'https://discord.gg/cj5rg'
 linkedin_public_url: arjunkalsi1 # Example: For public profile 'www.linkedin.com/in/john-smith', 'john-smith' is your linkedin_public_url
-disqus_username: loremipsum
-profile_picture: https://68.media.tumblr.com/93f384858e9273d5b980b418e2f2f4d5/tumblr_o5i2aybLJG1uapsfmo2_250.png
+profile_picture: https://bestanimations.com/media/discs/781973870cd-animated-gif-11.gif
 
 # Build settings
 markdown: kramdown
@@ -47,24 +44,21 @@ links:
       key_trigger: 5
   section_2:
     - title: github
-      url: http://www.github.com/victorvoid
+      url: http://www.github.com/arjunkalsi
       new_tab: true
       key_trigger: g
-    - title: twitter
-      url: http://www.twitter.com/victorvoid
-      key_trigger: t
     - title: search
       url: ""
       key_trigger: s #WARNING: search only works with "s"
 
 # projects in header index
-projects:
-  - name: fluany
-    url: https://github.com/fluany/fluany
-  - name: vim-frontend
-    url: https://github.com/victorvoid/vim-frontend
-  - name: generator-capybara
-    url: https://github.com/victorvoid/generator-capybara
+#projects:
+#  - name: fluany
+#    url: https://github.com/fluany/fluany
+#  - name: vim-frontend
+#    url: https://github.com/victorvoid/vim-frontend
+#  - name: generator-capybara
+#    url: https://github.com/victorvoid/generator-capybara
 
 # exclude my node related stuff
 exclude: ['package.json', 'src', 'node_modules']
