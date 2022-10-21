@@ -28,7 +28,6 @@ X_train = []
 X_test  = []
 y_test_actual = []
 
-
 for i in range(image_ss.shape[0]):
     for j in range(image_ss.shape[1]):
         if not np.isnan(image_ss[i][j]):
@@ -38,10 +37,8 @@ for i in range(image_ss.shape[0]):
             X_test.append([i,j])
             y_test_actual.append(image[i][j])
 
-
 def extractDigits(lst):
     return [[el] for el in lst]
-
 
 y_test_actual = np.array(extractDigits(y_test_actual))
 ```
@@ -49,7 +46,6 @@ y_test_actual = np.array(extractDigits(y_test_actual))
 Now that we have our data sets sorted out, we can test each technique:
 
 ### 1. RandomForestRegressor
-
 
 ```python
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
@@ -73,13 +69,10 @@ print(-gs.best_score_)
     {'max_depth': 10, 'min_samples_split': 20}
     4418.159874196007
 
-
 ```python
 rfModel = RandomForestRegressor(max_depth=10,min_samples_split=20)
 rfModel.fit(X_train,y_train)
 ```
-
-
 
     RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=10,
                max_features='auto', max_leaf_nodes=None,
@@ -87,8 +80,6 @@ rfModel.fit(X_train,y_train)
                min_samples_leaf=1, min_samples_split=20,
                min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=None,
                oob_score=False, random_state=None, verbose=0, warm_start=False)
-
-
 
 ```python
 for i in range(image_ss.shape[0]):
@@ -101,7 +92,6 @@ for i in range(image_ss.shape[0]):
 MSErf = mean_squared_error(y_test,y_test_actual)
 MSErf
 ```
-
 
     674.9260644662936
 
@@ -124,12 +114,9 @@ plt.imshow(image_ss_complete, cmap='gray', vmin=0, vmax=255)
 plt.show()
 ```
 
-
 ![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_16_0.png)
 
-
 ### 2. GradientBoostingRegressor
-
 
 ```python
 y_test2 = []
@@ -153,13 +140,10 @@ print(-gs2.best_score_)
     {'learning_rate': 0.1, 'max_depth': 5, 'n_estimators': 100}
     4154.170911663076
 
-
 ```python
 gbModel = GradientBoostingRegressor(learning_rate=0.1,max_depth=5,n_estimators=100)
 gbModel.fit(X_train,y_train)
 ```
-
-
 
     GradientBoostingRegressor(alpha=0.9, criterion='friedman_mse', init=None,
                  learning_rate=0.1, loss='ls', max_depth=5, max_features=None,
@@ -169,8 +153,6 @@ gbModel.fit(X_train,y_train)
                  n_estimators=100, n_iter_no_change=None, presort='auto',
                  random_state=None, subsample=1.0, tol=0.0001,
                  validation_fraction=0.1, verbose=0, warm_start=False)
-
-
 
 ```python
 X_test2 = []
@@ -185,7 +167,6 @@ for i in range(image_ss.shape[0]):
 MSEgb = mean_squared_error(y_test2,y_test_actual)
 MSEgb
 ```
-
 
     807.2361077570746
 
@@ -208,12 +189,9 @@ plt.imshow(image_ss_complete2, cmap='gray', vmin=0, vmax=255)
 plt.show()
 ```
 
-
 ![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_23_0.png)
 
-
 ### 3. 2-D Gaussian kernel FM Regressor
-
 
 ```python
 from sklearn.model_selection import cross_val_score
@@ -276,12 +254,8 @@ for sig in sigs:
     sigma = 50
     MSE = 7643.011517213762
 
-
-
 The lowest MSE for this method is 7643.01 (not very low) when sigma = 50.
 Let's use this on the test set:
-
-
 
 ```python
 lin = LinearRegression()
@@ -301,8 +275,6 @@ MSE = mean_squared_error(gauss_y_test,y_test_actual)
 MSE
 ```
 
-
-
     5798.050017820173
 
 The MSE for this method is still pretty high. Let's see what it looks like:
@@ -321,9 +293,7 @@ plt.imshow(image_ss_gauss, cmap='gray', vmin=0, vmax=255)
 plt.show()
 ```
 
-
 ![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_37_0.png)
-
 
 ### We can see that the Random Forest Regressor looks like it's performing the best here as it has the lowest MSE. However, Gradient Boosting looks better and  I think this may be due to the inspection of more optimal parameters in the cross-validation stage, allowing the predict function to predict better parameters.
 
@@ -613,7 +583,6 @@ Now let's try each of our methods again.
 
 ### RandomForestRegressor with ys:
 
-
 ```python
 from sklearn.model_selection import GridSearchCV
 
@@ -639,8 +608,6 @@ MSE = mean_squared_error(y_test_actual,y_test2)
 MSE
 ```
 
-
-
     187.91561207966419
 
 (much lower MSE)
@@ -659,12 +626,9 @@ plt.imshow(image_ss_complete3, cmap='gray', vmin=0, vmax=255)
 plt.show()
 ```
 
-
 ![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_65_0.png)
 
-
 ### GradientBoostingRegressor with ys
-
 
 ```python
 from sklearn.model_selection import GridSearchCV
@@ -692,11 +656,7 @@ MSE = mean_squared_error(y_test_actual,y_test3)
 MSE
 ```
 
-
-
     161.93799834274037
-
-
 
 ```python
 image_ss_complete4 = image_ss.copy()
@@ -712,8 +672,6 @@ plt.imshow(image_ss_complete4, cmap='gray', vmin=0, vmax=255)
 plt.show()
 ```
 
-
 ![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_72_0.png)
-
 
 ### We can see the GBR performs really well with this method. We could go even further and add diagonal adjacent values to improve our modelling method, or even pixels that are 2 away from the pixel in focus etc. Either way a GBR may be preferable to a RFR method based on our results here, however you probably know that a deep learning method is likely to perform even better than both, especially in light of the current wave of visual work innovation that is occurring at the moment. Either way thanks for reading and happy image filling!
