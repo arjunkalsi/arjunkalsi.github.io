@@ -24,8 +24,8 @@ sns.set()
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
-cid ="36d9dfbc63c5405795ff6c80bd02a20f"
-secret = "0b047cfb14fb46ad8d7130294c975b1d"
+cid ="xx"
+secret = "xx"
 
 client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
@@ -680,12 +680,6 @@ df_final = df_carti_tracks
 df_final['tsne1'] = carti_tsne[:,0]
 df_final['tsne2'] = carti_tsne[:,1]
 ```
-
-    /Users/arjunkalsi/anaconda3/lib/python3.7/site-packages/sklearn/manifold/_t_sne.py:783: FutureWarning: The default initialization in TSNE will change from 'random' to 'pca' in 1.2.
-      FutureWarning,
-    /Users/arjunkalsi/anaconda3/lib/python3.7/site-packages/sklearn/manifold/_t_sne.py:793: FutureWarning: The default learning rate in TSNE will change from 200.0 to 'auto' in 1.2.
-      FutureWarning,
-
 
     [t-SNE] Computing 19 nearest neighbors...
     [t-SNE] Indexed 58 samples in 0.000s...
