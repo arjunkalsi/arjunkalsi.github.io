@@ -440,7 +440,7 @@ plt.plot(df1['Stocks'])
 
 
 
-![png](https://github.com/arjunkalsi/arjunkalsi.github.io/tree/master/img/wti/output_14_1.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/wti/output_14_1.png)
 
 
 
@@ -1052,7 +1052,7 @@ plt.show()
 ```
 
 
-![png](https://github.com/arjunkalsi/arjunkalsi.github.io/tree/master/img/wti/output_24_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/wti/output_24_0.png)
 
 
 
@@ -2426,7 +2426,7 @@ plt.show()
 ```
 
 
-![png](https://github.com/arjunkalsi/arjunkalsi.github.io/tree/master/img/wti/output_43_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/wti/output_43_0.png)
 
 
 ### Now let's try to find the optimal parameters for the strategy. First let's find the optimal value for w, which is the rolling window value for the rolling regression calculation:
@@ -2575,7 +2575,7 @@ plt.show()
 ```
 
 
-![png](https://github.com/arjunkalsi/arjunkalsi.github.io/tree/master/img/wti/output_53_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/wti/output_53_0.png)
 
 
 
@@ -2983,7 +2983,7 @@ plt.show()
 ```
 
 
-![png](https://github.com/arjunkalsi/arjunkalsi.github.io/tree/master/img/wti/output_66_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/wti/output_66_0.png)
 
 
 ### Let's download the data in an excel file
@@ -3811,7 +3811,7 @@ plt.plot(wti_war['Deaths'])
 
 
 
-![png](https://github.com/arjunkalsi/arjunkalsi.github.io/tree/master/img/wti/output_75_1.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/wti/output_75_1.png)
 
 
 ### The strategy is to hold nothing when the deaths are above the threshold. We initially did this with no time lag  we decided to add a time lag of approximately 1 year as acts of war and terror usually occur in succession:
@@ -3918,7 +3918,7 @@ plt.show()
 ```
 
 
-![png](https://github.com/arjunkalsi/arjunkalsi.github.io/tree/master/img/wti/output_79_0.png)
+![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/wti/output_79_0.png)
 
 
 ### Although the war-based strategy is obviously not the most robust and may be completely random, we can see that by assigning a threshold to terminate trading we have considerably reduced maximum drawdown and thus reduced risk and improved P&L. We have also improved the Sharpe ratio by so this experiment was surprisingly successful. By sampling over a larger range we may be able to see more reliable patterns, but we may not have spent enough time in a globalising economy to notice patterns/time-lags like these.
