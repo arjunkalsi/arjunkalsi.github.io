@@ -840,6 +840,7 @@ I'm really not sure how to explain this one, especially Lean 4 Real - maybe one 
 
 ![Alt Text](https://media0.giphy.com/media/l4FssXeliObIRSCmQ/giphy.gif?cid=ecf05e47uq3eqixaz6t4l4gdv029czyyeszaf4k0w5s73a5d&rid=giphy.gif&ct=g)
 
+btw the real answer is obviously Long Time
 
 ```python
 
