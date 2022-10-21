@@ -14,6 +14,8 @@ profile_picture: https://bestanimations.com/media/discs/781973870cd-animated-gif
 
 # Build settings
 markdown: kramdown
+plugins:
+  - jekyll-seo-tag
 highlighter: rouge
 permalink: /:title/
 
