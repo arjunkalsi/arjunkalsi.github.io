@@ -6,6 +6,8 @@ tags: [math, tech]
 ---
 ![Alt Text](https://media0.giphy.com/media/McmAF0TXnXNZPBqBud/giphy.gif)
 
+<p class="music-read"><a href="spotify:track:0oJHQgG9iC2imbuRjzNKZE?si=d345221d92004cde">Click Me</a></p>
+
 ### As I learn more and more in my postgraduate degree in mathematics, I can't help but return back to the age-old question - the question everyone wants an answer to - "do all Playboi Carti songs sound the same?". Luckily, now we can actually mathematically find out. Let's do some data visualisation and see whats going on with Jordan Carter's music:
 
 ```python
