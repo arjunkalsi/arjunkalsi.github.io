@@ -18,7 +18,7 @@ Next, using each of the following methods:
 
 • GradientBoostingRegressor
 
-• A 2−D Gaussian kernel feature map regression, where each of your feature maps is φσ(x, x0) = exp(−|x−x0|^2/2σ^2) and you have rescaled your image pixel locations so that x, x0 ∈ [0, 1]^2
+• A 2−D Gaussian kernel feature map regression
 
 
 ```python
@@ -716,4 +716,4 @@ plt.show()
 ![png](https://raw.githubusercontent.com/arjunkalsi/arjunkalsi.github.io/master/img/imgdata/output_72_0.png)
 
 
-### We can see the GBR performs really well with this method. We could go even further and add diagonal adjacent values to improve our modelling method, or even pixels that are 2 away from the pixel in focus etc. Either way a GBR may be preferable to a RFR method based on our results here, however you probably know that a deep learning method is likely to perform even better than both, especially in light of the current wave of visual work innovation that is occurring at the moment. Either way thanks for reading and happy image filling! 
+### We can see the GBR performs really well with this method. We could go even further and add diagonal adjacent values to improve our modelling method, or even pixels that are 2 away from the pixel in focus etc. Either way a GBR may be preferable to a RFR method based on our results here, however you probably know that a deep learning method is likely to perform even better than both, especially in light of the current wave of visual work innovation that is occurring at the moment. Either way thanks for reading and happy image filling!
