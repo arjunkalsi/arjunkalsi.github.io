@@ -44,7 +44,7 @@ track_name = []
 popularity = []
 track_id = []
 
-#get all relevant info for Ariana Grande tracks via a 'search' query to the API
+#get all relevant info for Playboi Carti tracks via a 'search' query to the API
 #this took about 2 seconds to run
 for i in range(0,400,50):
     track_results = sp.search(q='artist:"playboi carti"', type='track', limit=50,offset=i)
